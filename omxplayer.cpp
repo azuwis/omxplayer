@@ -448,6 +448,7 @@ int main(int argc, char *argv[])
   const int vol_opt       = 0x106;
   const int boost_on_downmix_opt = 0x200;
   const int loop_opt = 0x201;
+  const int loop_index_opt = 0x202;
 
   struct option longopts[] = {
     { "info",         no_argument,        NULL,          'i' },
@@ -473,6 +474,7 @@ int main(int argc, char *argv[])
     { "win",          required_argument,  NULL,          pos_opt },
     { "boost-on-downmix", no_argument,    NULL,          boost_on_downmix_opt },
     { "loop",         no_argument,        NULL,          loop_opt },
+    { "loop-index",   required_argument,  NULL,          loop_index_opt },
     { 0, 0, 0, 0 }
   };
 
@@ -574,6 +576,9 @@ int main(int argc, char *argv[])
         break;
       case loop_opt:
         m_loop = true;
+        break;
+      case loop_index_opt:
+        loop_index = std::max(atoi(optarg), 0);
         break;
       case 0:
         break;

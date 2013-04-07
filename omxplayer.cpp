@@ -102,6 +102,7 @@ bool              m_has_subtitle        = false;
 float             m_display_aspect      = 0.0f;
 bool              m_boost_on_downmix    = false;
 bool              m_loop                = false;
+bool              m_loop_once           = false;
 
 enum{ERROR=-1,SUCCESS,ONEBYTE};
 
@@ -449,6 +450,7 @@ int main(int argc, char *argv[])
   const int boost_on_downmix_opt = 0x200;
   const int loop_opt = 0x201;
   const int loop_index_opt = 0x202;
+  const int loop_once_opt = 0x203;
 
   struct option longopts[] = {
     { "info",         no_argument,        NULL,          'i' },
@@ -475,6 +477,7 @@ int main(int argc, char *argv[])
     { "boost-on-downmix", no_argument,    NULL,          boost_on_downmix_opt },
     { "loop",         no_argument,        NULL,          loop_opt },
     { "loop-index",   required_argument,  NULL,          loop_index_opt },
+    { "loop-once",    no_argument,        NULL,          loop_once_opt },
     { 0, 0, 0, 0 }
   };
 
@@ -579,6 +582,9 @@ int main(int argc, char *argv[])
         break;
       case loop_index_opt:
         loop_index = std::max(atoi(optarg), 0);
+        break;
+      case loop_once_opt:
+        m_loop_once = true;
         break;
       case 0:
         break;
@@ -1025,6 +1031,9 @@ int main(int argc, char *argv[])
             m_filename = m_fn_buf;
             if (!Exists(m_filename))
             {
+              if (m_loop_once) {
+                goto do_exit;
+              }
               loop_index = 0;
               snprintf(m_fn_buf, 255, m_filename_format.c_str(), loop_index++);
               m_filename = m_fn_buf;

@@ -25,7 +25,7 @@
 #endif
 #include "utils/log.h"
 
-#define MAX_AUDIO_FRAME_SIZE (AVCODEC_MAX_AUDIO_FRAME_SIZE*1.5)
+#define MAX_AUDIO_FRAME_SIZE (192000*1.5)
 
 COMXAudioCodecOMX::COMXAudioCodecOMX()
 {
@@ -138,7 +138,7 @@ int COMXAudioCodecOMX::Decode(BYTE* pData, int iSize)
   int iBytesUsed, got_frame;
   if (!m_pCodecContext) return -1;
 
-  m_iBufferSize1 = AVCODEC_MAX_AUDIO_FRAME_SIZE;
+  m_iBufferSize1 = 192000;
   m_iBufferSize2 = 0;
 
   AVPacket avpkt;

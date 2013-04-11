@@ -8,11 +8,11 @@ all: checkout configure compile
 
 copy:
 	find ffmpeg -name '*.so*' -exec cp {} . \;
-	$(TOOLCHAIN)/bin/$(HOST)-strip *.so*
+	$(TOOLCHAIN)/bin/strip *.so*
 
 compile: 
 	cd ffmpeg; \
-	make -j9
+	make
 
 configure: 
 	cd ffmpeg; \
@@ -20,7 +20,6 @@ configure:
 	LDFLAGS="" \
   ./configure \
 			--extra-cflags="-mfpu=vfp -mfloat-abi=$(FLOAT) -mno-apcs-stack-check -mstructure-size-boundary=32 -mno-sched-prolog" \
-			--enable-cross-compile \
 			--enable-shared \
 			--disable-static \
 			--arch=arm \
@@ -50,11 +49,11 @@ configure:
 			--disable-neon \
 			--enable-armv6t2 \
 			--enable-armv6 \
-			--enable-armvfp \
+			--enable-vfp \
 			--enable-hardcoded-tables \
 			--disable-runtime-cpudetect \
-			--disable-debug \
-			--cross-prefix=$(TOOLCHAIN)/bin/$(HOST)-
+			--disable-debug 
+			--cross-prefix=$(TOOLCHAIN)/bin/
 
 clean:
 	@rm -rf ffmpeg
@@ -64,6 +63,6 @@ checkout:
 	cd ffmpeg; git checkout master;	git checkout 8c51ea54897c2d8671b38efecc1422ad4ad344f9
 
 install:
-	cd ffmpeg; make -j9 DESTDIR="$(WORK)/ffmpeg_compiled" install
-	$(TOOLCHAIN)/bin/$(HOST)-strip ffmpeg_compiled/usr/local/lib/*.so
+	cd ffmpeg; make DESTDIR="$(WORK)/ffmpeg_compiled" install
+	$(TOOLCHAIN)/bin/strip ffmpeg_compiled/usr/local/lib/*.so
 

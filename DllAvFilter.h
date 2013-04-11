@@ -46,15 +46,18 @@ extern "C" {
     #include <libavfilter/avfiltergraph.h>
     #include <libavfilter/buffersink.h>
     #include <libavfilter/avcodec.h>
+    #include <libavfilter/buffersrc.h>
   #elif (defined HAVE_FFMPEG_AVFILTER_H)
     #include <ffmpeg/avfiltergraph.h>
     #include <ffmpeg/buffersink.h>
     #include <ffmpeg/avcodec.h>
+    #include <ffmpeg/buffersrc.h>
   #endif
 #else
   #include "libavfilter/avfiltergraph.h"
   #include "libavfilter/buffersink.h"
   #include "libavfilter/avcodec.h"
+  #incdlue "libavfilter/buffersrc.h"
 #endif
 }
 
@@ -130,7 +133,7 @@ public:
 #if LIBAVFILTER_VERSION_INT < AV_VERSION_INT(3,0,0)
   virtual int av_vsrc_buffer_add_frame(AVFilterContext *buffer_filter, AVFrame *frame, int flags) { return ::av_vsrc_buffer_add_frame(buffer_filter, frame, flags); }
 #else
-  virtual int av_buffersrc_add_frame(AVFilterContext *buffer_filter, AVFrame* frame, int flags) { return ::av_buffersrc_add_frame(buffer_filter, frame, flags); }
+  virtual int av_buffersrc_add_frame(AVFilterContext *buffer_filter, AVFrame* frame) { return ::av_buffersrc_add_frame(buffer_filter, frame); }
 #endif
   virtual void avfilter_unref_buffer(AVFilterBufferRef *ref) { ::avfilter_unref_buffer(ref); }
   virtual int avfilter_link(AVFilterContext *src, unsigned srcpad, AVFilterContext *dst, unsigned dstpad) { return ::avfilter_link(src, srcpad, dst, dstpad); }
